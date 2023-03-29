@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'FoodMenu.dart';
 
 const appName = "Dev as New";
 
@@ -13,12 +14,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: appName,
-      home: const MyHomePage(),
+      home: const FoodPage(),
       theme: ThemeData(primarySwatch: Colors.indigo),
     );
   }
 }
 
+// My Home Page stateful widget
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
@@ -27,12 +29,113 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("$appName - Account"),
+      ),
+      body: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(10)
+            ),
+            height: 100,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black45,
+              borderRadius: BorderRadius.circular(10)
+            ),
+            height: 100,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.brown,
+              borderRadius: BorderRadius.circular(10)
+            ),
+            height: 100,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Food menu stateful widget
+class FoodPage extends StatefulWidget {
+  const FoodPage({super.key});
+
+  @override
+  State<FoodPage> createState() => _FoodWidgetState();
+}
+
+class _FoodWidgetState extends State<FoodPage> {
   // state variable
   int number = 0;
 
   @override
   Widget build(BuildContext context) {
+    // Get Food Data
+    var foods = getFoodMenuData();
 
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Menu"),
+      ),
+
+      // body: Center(
+      //   // child: Column(
+      //   //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //   //   children: data,
+      //   // ),
+      //   child: ListView(
+      //     children: getData(),
+      //   ),
+      // ),
+
+      body: ListView.builder(
+          itemCount: foods.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              leading: Image.asset(foods[index].image),
+              title:
+                  Text(foods[index].name, style: const TextStyle(fontSize: 20)),
+              subtitle: Text("Price : ${foods[index].price} Baht"),
+              onTap: () => {
+                // ignore: avoid_print
+                print(foods[index].name)
+              },
+            );
+          }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: addNumber,
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  // Get Menu data method
+  List<FoodMenu> getFoodMenuData() {
+    List<FoodMenu> foodData = [
+      FoodMenu("Fry Egg", "100", "image/Foods.png"),
+      FoodMenu("Raman", "200", "image/Foods.png"),
+      FoodMenu("Steak", "300", "image/Foods.png"),
+      FoodMenu("Hot Dogs", "400", "image/Foods.png"),
+      FoodMenu("Chicken Wing", "500", "image/Foods.png"),
+      FoodMenu("Pork Chop", "600", "image/Foods.png"),
+      FoodMenu("Ice-Cream", "700", "image/Foods.png"),
+      FoodMenu("Matcha", "800", "image/Foods.png"),
+      FoodMenu("Thai Tea", "900", "image/Foods.png"),
+      FoodMenu("Wing Sabb KFC", "1000", "image/Foods.png"),
+    ];
+    return foodData;
+  }
+
+  // get demo data method
+  List<Widget> getData() {
     // Widget data initialize
     List<Widget> data = [];
 
@@ -53,8 +156,8 @@ class _MyWidgetState extends State<MyHomePage> {
       ),
     ));
 
-    // Dev as New Image 
-    data.add(Image.asset("image/DevAsNew.png"));
+    // Dev as New Image
+    data.add(Image.asset("image/Foods.png"));
 
     data.add(const ListTile(
       title: Text(
@@ -71,24 +174,7 @@ class _MyWidgetState extends State<MyHomePage> {
       ));
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(appName),
-      ),
-      body: Center(
-        // child: Column(
-        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //   children: data,
-        // ),
-        child: ListView(
-          children: data,
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: addNumber,
-        child: const Icon(Icons.add),
-      ),
-    );
+    return data;
   }
 
   // add function
