@@ -1,5 +1,9 @@
+// import 'dart:io';
+// import 'dart:js_util';
 import 'package:flutter/material.dart';
 import 'FoodMenu.dart';
+import 'MoneyBox.dart';
+import 'Models.dart';
 
 const appName = "Dev as New";
 
@@ -14,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: appName,
-      home: const FoodPage(),
+      home: const MyHomePage(),
       theme: ThemeData(primarySwatch: Colors.indigo),
     );
   }
@@ -29,36 +33,43 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyHomePage> {
+
+  var models;
+  Future<void> fetchData() async {
+    models = await getDataFromApi();
+    setState(() => {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    
+    fetchData();
+
+    print("Call init state.");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("$appName - Account"),
       ),
-      body: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(10)
-            ),
-            height: 100,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.black45,
-              borderRadius: BorderRadius.circular(10)
-            ),
-            height: 100,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.brown,
-              borderRadius: BorderRadius.circular(10)
-            ),
-            height: 100,
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            MoneyBox("${models?.userId.toString()}.${models?.title}" , models?.id?.toDouble() ?? 0, Colors.indigo, 100),
+            const SizedBox(height: 5),
+            MoneyBox("Total Amoung : ", 30000, Colors.blueGrey, 100),
+            const SizedBox(height: 5),
+            MoneyBox("InCome : ", 1000, Colors.green, 60),
+            const SizedBox(height: 5),
+            MoneyBox("OutCome : ", 3000, Colors.red, 60),
+            const SizedBox(height: 5),
+            MoneyBox("Pending : ", 5000, Colors.orange, 60),
+          ],
+        ),
       ),
     );
   }
